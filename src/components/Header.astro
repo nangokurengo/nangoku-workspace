@@ -1,0 +1,110 @@
+---
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { name: 'Home', path: '/' },
+  { name: 'Photos', path: '/photos' },
+  { name: 'Blog', path: '/blog' },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/5 bg-slate-950/70 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center gap-3 group">
+      <!-- Minimalist Jet / Tech Icon -->
+      <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-blue to-brand-purple flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-brand-blue/20 group-hover:scale-105 transition-transform duration-300">
+        N
+      </span>
+      <span class="font-sans font-bold text-lg tracking-wider text-white group-hover:text-brand-blue transition-colors duration-300">
+        nangoku <span class="text-brand-blue font-light">workspace</span>
+      </span>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center gap-1">
+      {navItems.map((item) => {
+        const isActive = currentPath === item.path || 
+                        (item.path !== '/' && currentPath.startsWith(item.path));
+        return (
+          <a
+            href={item.path}
+            class={`px-4 py-2 rounded-lg text-sm font-medium tracking-wide transition-all duration-300 ${
+              isActive 
+                ? 'bg-white/10 text-white border-b-2 border-brand-blue glow-text' 
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            {item.name}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Mobile Navigation Toggle -->
+    <button 
+      id="mobile-menu-btn" 
+      class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 focus:outline-none"
+      aria-label="Toggle Menu"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="hamburger-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="close-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation Dropdown -->
+  <div 
+    id="mobile-menu" 
+    class="hidden md:hidden border-t border-white/5 bg-slate-950/95 backdrop-blur-lg px-6 py-4 space-y-2 absolute top-20 left-0 right-0 shadow-2xl transition-all duration-300"
+  >
+    {navItems.map((item) => {
+      const isActive = currentPath === item.path || 
+                      (item.path !== '/' && currentPath.startsWith(item.path));
+      return (
+        <a
+          href={item.path}
+          class={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 ${
+            isActive 
+              ? 'bg-brand-blue/10 text-brand-blue' 
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          {item.name}
+        </a>
+      );
+    })}
+  </div>
+</header>
+
+<script>
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  if (mobileMenuBtn && mobileMenu && hamburgerIcon && closeIcon) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isExpanded = mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden', !isExpanded);
+      closeIcon.classList.toggle('hidden', isExpanded);
+    });
+  }
+
+  // Header background opacity change on scroll
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (header) {
+      if (window.scrollY > 20) {
+        header.classList.add('bg-slate-950/90', 'shadow-lg', 'shadow-slate-950/20');
+        header.classList.remove('bg-slate-950/70');
+      } else {
+        header.classList.add('bg-slate-950/70');
+        header.classList.remove('bg-slate-950/90', 'shadow-lg', 'shadow-slate-950/20');
+      }
+    }
+  });
+</script>

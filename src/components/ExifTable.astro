@@ -1,0 +1,69 @@
+---
+interface Props {
+  exif: {
+    camera: string;
+    lens: string;
+    shutter: string;
+    aperture: string;
+    iso: number;
+    focalLength: string;
+  };
+  location: string;
+  date: Date;
+  description?: string;
+}
+
+const { exif, location, date, description } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(date);
+
+const exifItems = [
+  { label: 'Camera', value: exif.camera, icon: '📷' },
+  { label: 'Lens', value: exif.lens, icon: '🔍' },
+  { label: 'Shutter Speed', value: exif.shutter, icon: '⏱️' },
+  { label: 'Aperture', value: exif.aperture, icon: '⭕' },
+  { label: 'ISO Sensitivity', value: `ISO ${exif.iso}`, icon: '⚡' },
+  { label: 'Focal Length', value: exif.focalLength, icon: '📏' },
+  { label: 'Location', value: location, icon: '📍' },
+  { label: 'Date Captured', value: formattedDate, icon: '📅' },
+];
+---
+
+<div class="space-y-8 mt-12 w-full max-w-5xl mx-auto">
+  <!-- EXIF and Data Grid -->
+  <div class="glass p-6 rounded-2xl glow-border">
+    <h3 class="text-lg font-bold tracking-wide font-sans text-white border-b border-white/10 pb-4 mb-6 flex items-center gap-2">
+      <span class="text-brand-blue">EXIF</span> Metadata
+    </h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {exifItems.map((item) => (
+        <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5 hover:border-brand-blue/30 transition-all duration-300">
+          <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            <span>{item.icon}</span>
+            <span>{item.label}</span>
+          </div>
+          <p class="text-sm font-medium text-white break-words">
+            {item.value}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Story / Shooting Episode -->
+  {description && (
+    <div class="glass p-6 rounded-2xl glow-border">
+      <h3 class="text-lg font-bold tracking-wide font-sans text-white border-b border-white/10 pb-4 mb-4 flex items-center gap-2">
+        <span class="text-brand-purple">Shooting</span> Episode
+      </h3>
+      <p class="text-slate-300 leading-relaxed text-sm whitespace-pre-line font-sans">
+        {description}
+      </p>
+    </div>
+  )}
+</div>

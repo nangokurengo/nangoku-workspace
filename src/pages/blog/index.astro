@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Layout title="Blog" description="自宅サーバー、ガジェット、キーボード、モノづくりなどの技術ネタや、撮影記などのブログ記事一覧です。">
+  <div class="max-w-4xl mx-auto px-6">
+    <!-- Page Header -->
+    <div class="border-b border-white/5 pb-8 mb-12 text-center md:text-left">
+      <span class="text-brand-purple text-xs uppercase tracking-widest font-extrabold mb-2 block">
+        💻 Systems & Gadgets
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-wide font-sans">
+        Technical <span class="text-brand-purple">Blog</span>
+      </h1>
+      <p class="text-slate-400 text-sm mt-3 max-w-2xl leading-relaxed">
+        自宅のUbuntu/Dockerサーバーの運用ノウハウ、自作キーボードやデスク環境の構築、ガジェットのレビューなどの備忘録。
+      </p>
+    </div>
+
+    <!-- Blog Posts List -->
+    <div class="flex flex-col gap-8">
+      {sortedPosts.map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+  </div>
+</Layout>

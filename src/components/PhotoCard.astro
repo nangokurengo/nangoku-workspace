@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  photo: CollectionEntry<'photos'>;
+}
+
+const { photo } = Astro.props;
+const { id, data } = photo;
+---
+
+<a href={`/photos/${id}`} class="group relative block overflow-hidden rounded-2xl border border-white/5 glass transition-all duration-300 hover:border-brand-blue/30 hover:shadow-lg hover:shadow-brand-blue/10">
+  <div class="aspect-[4/3] sm:aspect-square md:aspect-[4/3] w-full overflow-hidden bg-slate-900">
+    <Image 
+      src={data.image} 
+      alt={data.title}
+      width={600}
+      height={450}
+      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+    />
+  </div>
+
+  <!-- Ambient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300"></div>
+
+  <!-- Text Details -->
+  <div class="absolute inset-0 flex flex-col justify-end p-6 text-left transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+    <span class="inline-block bg-brand-blue/20 text-brand-blue text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full mb-2 w-fit">
+      {data.location}
+    </span>
+    <h3 class="text-base font-bold text-white tracking-wide group-hover:text-brand-blue transition-colors duration-300 line-clamp-1">
+      {data.title}
+    </h3>
+    
+    <!-- Mini Exif on hover -->
+    <div class="flex items-center gap-3 text-xs text-slate-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <span>{data.exif.camera}</span>
+      <span>•</span>
+      <span>{data.exif.focalLength}</span>
+    </div>
+  </div>
+</a>

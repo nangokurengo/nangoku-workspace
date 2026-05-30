@@ -1,0 +1,29 @@
+---
+const today = new Date();
+---
+
+<footer class="border-t border-white/5 bg-slate-950 py-12 px-6 mt-auto">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <!-- Brand / Copy -->
+    <div class="text-center md:text-left">
+      <p class="font-sans font-bold text-base tracking-wide text-white">
+        nangoku <span class="text-brand-blue font-light">workspace</span>
+      </p>
+      <p class="text-xs text-slate-500 mt-2">
+        &copy; {today.getFullYear()} nangoku. All rights reserved. Hybrid Secret Base.
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="flex items-center gap-6 text-sm text-slate-400">
+      <a href="/photos" class="hover:text-white transition-colors duration-300">Portfolio</a>
+      <a href="/blog" class="hover:text-white transition-colors duration-300">Tech Blog</a>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300 flex items-center gap-1">
+        GitHub
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>

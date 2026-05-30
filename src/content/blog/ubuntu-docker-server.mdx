@@ -1,0 +1,107 @@
+---
+title: "Ubuntu & Docker-compose で構築する自宅サーバー秘密基地化計画"
+pubDate: 2026-05-10
+category: "server"
+description: "自宅の余剰PCを活用し、Ubuntu ServerとDocker-composeを用いてNextcloudやHome Assistantなどを稼働させるための環境構築手順と、安定運用のTipsをまとめました。"
+coverImage: "../../assets/images/home_server_rack.png"
+tags: ["ubuntu", "docker", "home-server", "linux"]
+---
+
+自宅サーバーの構築は、エンジニアにとって最もクリエイティブで楽しい「秘密基地づくり」です。
+本記事では、省電力なミニPCや余ったデスクトップPCを使い、Ubuntu ServerをベースにDockerコンテナを活用したWebサービス群（プライベートクラウド、スマートホーム）をセキュアに構築・運用するセットアップ方法を解説します。
+
+---
+
+## なぜ Ubuntu + Docker なのか？
+
+物理マシンに直接サービスをインストールしていくと、依存ライブラリの衝突や不要になった際のクリーンアップが困難になります。
+Dockerを活用することで、以下のような恩恵が得られます。
+
+1. **ポータビリティ**: `docker-compose.yml` とデータディレクトリをバックアップするだけで、別のハードウェアへ数分で移行可能。
+2. **リソース管理**: コンテナごとにCPUやメモリの上限を設定可能。
+3. **サンドボックス**: OSのホスト環境を汚さずに新しいツールを試せる。
+
+---
+
+## ディレクトリ構成案
+
+以下は、自宅サーバーで稼働させるサービスのデータを一元管理するためのディレクトリ構成です。
+
+```text
+/home/nangoku/docker/
+├── docker-compose.yml
+└── data/
+    ├── nextcloud/
+    │   └── html/
+    └── homeassistant/
+        └── config/
+```
+
+---
+
+## docker-compose.yml の記述
+
+以下は、Nextcloud（クラウドストレージ）とHome Assistant（スマートホーム管理）を同時に起動するためのベース設定です。
+
+```yaml
+version: '3.8'
+
+services:
+  # プライベートクラウドストレージ
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./data/nextcloud/html:/var/www/html
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=supersecure_pass
+
+  # スマートホームハブ
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./data/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+```
+
+---
+
+## 稼働サービス一覧（要件比較）
+
+| サービス名 | 主な用途 | 推奨スペック | 通信プロトコル |
+| :--- | :--- | :--- | :--- |
+| **Nextcloud** | 写真・ファイルの同期バックアップ | 2 Core, 4GB RAM | HTTPS (8080) |
+| **Home Assistant** | スマート家電の統合・オートメーション | 1 Core, 2GB RAM | HTTP (8123) / Host |
+| **Pi-hole** | 自宅LAN内での広告ブロック・DNS | 1 Core, 512MB RAM | DNS (53) / HTTP (80) |
+
+---
+
+## 安定運用のためのシステム監視スクリプト
+
+サーバーの温度やストレージ状態を監視するためのシェルスクリプトです。cronで定期実行し、異常があればSlackやDiscordに通知します。
+
+```bash
+#!/bin/bash
+# system-check.sh
+
+THRESHOLD=80
+TEMP=$(vcgencmd measure_temp | egrep -o '[0-9]*\.[0-9]*')
+
+if (( $(echo "$TEMP > $THRESHOLD" | bc -l) )); then
+  curl -X POST -H 'Content-type: application/json' \
+    --data '{"text":"⚠️ 警告: 自宅サーバーの温度が上昇しています: '"$TEMP"'°C"}' \
+    https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+fi
+```
+
+自宅サーバーは、ハードウェアの選定からダッシュボードの構築まで、すべてを自分好みにチューニングできる無限の楽しさがあります。
+ぜひみなさんも、お好みの「秘密基地」を仕立ててみてください。

@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PhotoCard from '../../components/PhotoCard.astro';
+import { getCollection } from 'astro:content';
+
+const photos = await getCollection('photos');
+const sortedPhotos = photos.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Layout title="Photos" description="10年以上のキャリアを持つ航空機写真の作品ギャラリー。日本各地の空港や航空基地で捉えた珠玉の瞬間を公開しています。">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Page Header -->
+    <div class="border-b border-white/5 pb-8 mb-12 text-center md:text-left">
+      <span class="text-brand-blue text-xs uppercase tracking-widest font-extrabold mb-2 block">
+        📷 Creative Portfolio
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-wide font-sans">
+        Aviation <span class="text-brand-blue">Photography</span>
+      </h1>
+      <p class="text-slate-400 text-sm mt-3 max-w-2xl leading-relaxed">
+        レンズ越しに追いかけてきた航空機の美しさと力強さ。流れるフォルム、過酷な気象条件でのアプローチ、空気を切り裂くアフターバーナーの熱量を感じてください。
+      </p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedPhotos.map((photo) => (
+        <PhotoCard photo={photo} />
+      ))}
+    </div>
+  </div>
+</Layout>

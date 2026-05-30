@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { id, data } = post;
+
+const formattedDate = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(data.pubDate);
+
+const categoryColors: Record<string, string> = {
+  gadget: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  server: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  review: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  technology: 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+  photography: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  custom: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
+};
+
+const categoryBadgeColor = categoryColors[data.category] || categoryColors.custom;
+---
+
+<a href={`/blog/${id}`} class="group flex flex-col md:flex-row gap-6 glass glass-hover p-5 rounded-2xl border border-white/5 overflow-hidden">
+  {data.coverImage && (
+    <div class="w-full md:w-48 h-40 md:h-36 rounded-xl overflow-hidden bg-slate-900 flex-shrink-0">
+      <Image
+        src={data.coverImage}
+        alt={data.title}
+        width={300}
+        height={200}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    </div>
+  )}
+
+  <div class="flex-grow flex flex-col justify-between">
+    <div>
+      <!-- Meta Badges -->
+      <div class="flex items-center gap-3 text-xs mb-3">
+        <span class={`px-2.5 py-0.5 rounded-full border text-[11px] font-semibold uppercase ${categoryBadgeColor}`}>
+          {data.category}
+        </span>
+        <span class="text-slate-400 font-sans">{formattedDate}</span>
+      </div>
+
+      <!-- Title -->
+      <h3 class="text-lg font-bold text-white tracking-wide group-hover:text-brand-blue transition-colors duration-300 mb-2">
+        {data.title}
+      </h3>
+
+      <!-- Description -->
+      <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">
+        {data.description}
+      </p>
+    </div>
+
+    <!-- Tags -->
+    {data.tags && data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mt-4">
+        {data.tags.map((tag) => (
+          <span class="bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] px-2 py-0.5 rounded-md transition-colors duration-200">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>

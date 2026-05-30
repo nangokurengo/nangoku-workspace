@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = 'nangoku workspace - 航空機写真のポートフォリオと自宅サーバー等の技術ブログを融合させたハイブリッド型秘密基地。',
+  image = '/ogp-default.png', // Fallback default OGP image
+  type = 'website',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nangoku-workspace.pages.dev');
+const ogImageUrl = image.startsWith('http') ? image : new URL(image, canonicalURL.origin).toString();
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <!-- Technical SEO -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Title and Meta -->
+    <title>{title} | nangoku workspace</title>
+    <meta name="description" content={description} />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={`${title} | nangoku workspace`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={`${title} | nangoku workspace`} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImageUrl} />
+
+    <!-- Sitemap Link -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="flex flex-col min-h-screen text-slate-100 selection:bg-brand-blue/30 selection:text-white">
+    <!-- Header Navigation -->
+    <Header />
+
+    <!-- Page Content -->
+    <main class="flex-grow pt-24 pb-16">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+  </body>
+</html>
