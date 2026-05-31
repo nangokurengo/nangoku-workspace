@@ -1,19 +1,19 @@
 ---
 title: "Sunset Dreamliner - Boeing 787-9"
-image: "../../assets/images/boeing_787_sunset.png"
-date: 2026-05-15
-location: "Haneda Airport (HND / RJTT)"
+image: "../../assets/images/P4150298.jpg"
+date: 2018-04-15
+location: "羽田空港 (HND / RJTT)"
 exif:
-  camera: "Canon EOS R5"
-  lens: "RF100-500mm F4.5-7.1 L IS USM"
-  shutter: "1/1250s"
-  aperture: "f/7.1"
-  iso: 400
-  focalLength: "500mm"
+  camera: "Olympus OM-D E-M1 Mark II"
+  lens: "M.ZUIKO DIGITAL ED 40-150mm F2.8 PRO + MC-14"
+  shutter: "1/2500s"
+  aperture: "f/8.0"
+  iso: 200
+  focalLength: "56mm (35mm equiv. 112mm)"
 description: |
   夕暮れ時の羽田空港 RWY 34L へアプローチするボーイング 787-9。
   黄金色に染まる東京湾を背景に、主翼が美しくしなる瞬間を撮影しました。夕日が機体側面に反射し、ロールアウトするエンジンのファンブレードまで克明に描写されています。
-  超望遠レンズの圧縮効果と、EOS R5 の高画素性能が存分に活きた一枚です。
+  M.ZUIKO 40-150mm PRO レンズとテレコンバーター MC-14 の組み合わせによる非常にシャープな描写性能が存分に活きた一枚です。
 ---
 
 夕暮れ時のアプローチは刻一刻と光の条件が変化するため、マニュアル露出での微調整が要求される過酷な環境です。
