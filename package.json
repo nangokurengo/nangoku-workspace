@@ -6,7 +6,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "predev": "node scripts/watermark.js",
     "dev": "astro dev",
+    "prebuild": "node scripts/watermark.js",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -16,6 +18,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.2",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
