@@ -31,6 +31,10 @@ const categoryColors: Record<string, string> = {
 };
 
 const categoryBadgeColor = categoryColors[data.category] || categoryColors.custom;
+
+const shareUrl = encodeURIComponent(Astro.url.href);
+const shareText = encodeURIComponent(`${data.title} - nangoku workspace`);
+const xShareUrl = `https://x.com/intent/post?url=${shareUrl}&text=${shareText}`;
 ---
 
 <Layout 
@@ -88,8 +92,25 @@ const categoryBadgeColor = categoryColors[data.category] || categoryColors.custo
     )}
 
     <!-- Dynamic Render Content -->
-    <div class="prose prose-invert max-w-none font-sans leading-relaxed">
+    <div class="prose prose-invert max-w-none font-sans leading-relaxed mb-12">
       <Content />
+    </div>
+
+    <!-- Share Section -->
+    <div class="border-t border-white/5 pt-8 mt-12 flex flex-col items-center gap-4">
+      <p class="text-xs text-slate-500 font-sans uppercase tracking-widest">Share this post</p>
+      <a
+        href={xShareUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors duration-200 text-white font-sans text-sm font-medium border border-white/5 shadow-md"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+        <span class="text-neutral-500">|</span>
+        <span>ポスト</span>
+      </a>
     </div>
   </article>
 </Layout>
